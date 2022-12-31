@@ -5,7 +5,7 @@ const router= express.Router();
 //each user whenever we fetch request for particular user
 const {v4 : uuidv4} = require('uuid')
 
-const users =[];
+let users =[];
 
 // all routes in here are starting with /users
 router.get('/', (req, res) => {
@@ -38,5 +38,30 @@ router.get('/:id',(req,res)=>{
 
     res.send(founduser);
 });
+
+//deleting the specific user with id
+router.delete('/:id',(req,res)=>{
+    const {id} = req.params;
+    users=users.filter((user)=>user.id!=id);
+    res.send(`User with the id ${id} was deleted`);
+});
+
+//updating the user information of specific id
+router.patch('/:id',(req,res)=>{
+    const {id} = req.params;
+    const user=users.find((user)=>user.id===id);
+    const {firstName,lastName,age}=req.body;
+    if(firstName){
+        user.firstName=firstName;
+    }
+    if(lastName){
+        user.lastName=lastName;
+    }
+    if(age){
+        user.age=age;
+    }
+    res.send(`User with the id ${id} was updated`);
+});
+
 
 module.exports = router;
